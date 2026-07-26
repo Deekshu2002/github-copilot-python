@@ -95,6 +95,7 @@ async function checkSolution() {
     msg.innerText = data.error;
     return;
   }
+
   const incorrect = new Set(data.incorrect.map(x => x[0]*SIZE + x[1]));
   for (let idx = 0; idx < inputs.length; idx++) {
     const inp = inputs[idx];
@@ -104,12 +105,16 @@ async function checkSolution() {
       inp.className = 'sudoku-cell incorrect';
     }
   }
-  if (incorrect.size === 0) {
+
+  if (data.status === 'incomplete') {
+    msg.style.color = '#f57c00';
+    msg.innerText = 'The puzzle is incomplete.';
+  } else if (data.status === 'incorrect') {
+    msg.style.color = '#d32f2f';
+    msg.innerText = 'The puzzle contains incorrect values.';
+  } else {
     msg.style.color = '#388e3c';
     msg.innerText = 'Congratulations! You solved it!';
-  } else {
-    msg.style.color = '#d32f2f';
-    msg.innerText = 'Some cells are incorrect.';
   }
 }
 

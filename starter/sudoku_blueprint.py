@@ -8,7 +8,7 @@ from flask import Blueprint, jsonify, render_template, request
 
 from sudoku_constants import SIZE
 from sudoku_generator import generate_puzzle
-from sudoku_validator import find_incorrect_cells
+from sudoku_validator import evaluate_board_state, find_incorrect_cells
 
 bp = Blueprint("sudoku", __name__)
 
@@ -46,4 +46,5 @@ def check_solution():
         return jsonify({"error": "No game in progress"}), 400
 
     incorrect = find_incorrect_cells(board, solution)
-    return jsonify({"incorrect": incorrect})
+    status = evaluate_board_state(board, solution)
+    return jsonify({"incorrect": incorrect, "status": status})
