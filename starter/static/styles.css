@@ -103,9 +103,21 @@ h1 {
     font-size: 18px;
 }
 
-#scoreboard-list {
-    padding-left: 20px;
-    margin-bottom: 0;
+.scoreboard-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.scoreboard-table th,
+.scoreboard-table td {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 8px 6px;
+    text-align: left;
+}
+
+.scoreboard-table th {
+    color: #555;
+    font-size: 14px;
 }
 
 .controls-top {
