@@ -1,14 +1,14 @@
-const SIZE = 9;
+const BOARD_SIZE = window.SUDOKU_SIZE ?? 9;
 
 function getCellIndex(row, col) {
-  return row * SIZE + col;
+  return row * BOARD_SIZE + col;
 }
 
 function getBoardState(inputs) {
   const board = [];
-  for (let row = 0; row < SIZE; row += 1) {
+  for (let row = 0; row < BOARD_SIZE; row += 1) {
     board[row] = [];
-    for (let col = 0; col < SIZE; col += 1) {
+    for (let col = 0; col < BOARD_SIZE; col += 1) {
       const idx = getCellIndex(row, col);
       const value = inputs[idx].value;
       board[row][col] = value ? parseInt(value, 10) : 0;
@@ -33,8 +33,8 @@ function applyConflictHighlighting(inputs, board) {
   const conflicts = new Set();
   const sources = new Set();
 
-  for (let row = 0; row < SIZE; row += 1) {
-    for (let col = 0; col < SIZE; col += 1) {
+  for (let row = 0; row < BOARD_SIZE; row += 1) {
+    for (let col = 0; col < BOARD_SIZE; col += 1) {
       const value = board[row][col];
       if (value === 0) {
         continue;
@@ -47,7 +47,7 @@ function applyConflictHighlighting(inputs, board) {
       }
 
       const seen = [];
-      for (let otherCol = 0; otherCol < SIZE; otherCol += 1) {
+      for (let otherCol = 0; otherCol < BOARD_SIZE; otherCol += 1) {
         if (otherCol === col) {
           continue;
         }
@@ -55,7 +55,7 @@ function applyConflictHighlighting(inputs, board) {
           seen.push(getCellIndex(row, otherCol));
         }
       }
-      for (let otherRow = 0; otherRow < SIZE; otherRow += 1) {
+      for (let otherRow = 0; otherRow < BOARD_SIZE; otherRow += 1) {
         if (otherRow === row) {
           continue;
         }

@@ -1,5 +1,5 @@
 // Client-side rendering and interaction for the Flask-backed Sudoku
-const SIZE = 9;
+const SIZE = window.SUDOKU_SIZE ?? 9;
 let puzzle = [];
 let currentDifficulty = 'easy';
 let hintsUsed = 0;
