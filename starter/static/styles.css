@@ -82,6 +82,32 @@ h1 {
     margin: 20px auto;
 }
 
+.timer-display {
+    margin-left: 12px;
+    font-weight: bold;
+    color: #1976d2;
+}
+
+.scoreboard-panel {
+    margin: 20px auto 40px;
+    max-width: 480px;
+    text-align: left;
+    background: #fff;
+    padding: 16px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.scoreboard-panel h2 {
+    margin-top: 0;
+    font-size: 18px;
+}
+
+#scoreboard-list {
+    padding-left: 20px;
+    margin-bottom: 0;
+}
+
 .controls-top {
     display: flex;
     justify-content: center;

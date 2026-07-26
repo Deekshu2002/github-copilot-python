@@ -4,6 +4,11 @@ let puzzle = [];
 let currentDifficulty = 'easy';
 let hintsUsed = 0;
 
+window.sudokuGameState = {
+  difficulty: currentDifficulty,
+  hintsUsed,
+};
+
 function createBoardElement() {
   const boardDiv = document.getElementById('sudoku-board');
   boardDiv.innerHTML = '';
@@ -34,6 +39,8 @@ function createBoardElement() {
 
 function renderPuzzle(puz) {
   puzzle = puz;
+  window.sudokuGameState.difficulty = currentDifficulty;
+  window.sudokuGameState.hintsUsed = hintsUsed;
   createBoardElement();
   const boardDiv = document.getElementById('sudoku-board');
   const inputs = boardDiv.getElementsByTagName('input');
@@ -72,8 +79,12 @@ async function newGame() {
   const res = await fetch(`/new?difficulty=${encodeURIComponent(currentDifficulty)}`);
   const data = await res.json();
   hintsUsed = data.hints_used ?? 0;
+  window.sudokuGameState.difficulty = currentDifficulty;
+  window.sudokuGameState.hintsUsed = hintsUsed;
   renderPuzzle(data.puzzle);
   document.getElementById('message').innerText = '';
+  window.sudokuTimer.resetTimer();
+  window.sudokuTimer.startTimer();
   const difficultyDisplay = document.getElementById('difficulty-display');
   if (difficultyDisplay) {
     const label = currentDifficulty.charAt(0).toUpperCase() + currentDifficulty.slice(1);
@@ -101,6 +112,7 @@ async function applyHint() {
   });
   const data = await res.json();
   hintsUsed = data.hints_used ?? hintsUsed;
+  window.sudokuGameState.hintsUsed = hintsUsed;
   updateHintCount();
 
   const boardInputs = document.getElementById('sudoku-board').getElementsByTagName('input');
@@ -170,6 +182,7 @@ async function checkSolution() {
   } else {
     msg.style.color = '#388e3c';
     msg.innerText = 'Congratulations! You solved it!';
+    window.sudokuTimer.completeGame();
   }
 }
 
@@ -182,6 +195,7 @@ window.addEventListener('load', () => {
     currentDifficulty = event.target.value;
     newGame();
   });
+  window.sudokuTimer.renderScoreboard();
   // initialize
   newGame();
 });
