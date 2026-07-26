@@ -9,6 +9,40 @@ window.sudokuGameState = {
   hintsUsed,
 };
 
+const THEME_STORAGE_KEY = 'sudoku-theme';
+const LIGHT_THEME = 'light';
+const DARK_THEME = 'dark';
+
+function getPreferredTheme() {
+  const saved = window.localStorage.getItem(THEME_STORAGE_KEY);
+  if (saved === LIGHT_THEME || saved === DARK_THEME) {
+    return saved;
+  }
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    return DARK_THEME;
+  }
+  return LIGHT_THEME;
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  const toggle = document.getElementById('theme-toggle');
+  if (toggle) {
+    const isDarkTheme = theme === DARK_THEME;
+    toggle.setAttribute('aria-pressed', String(isDarkTheme));
+    toggle.setAttribute('aria-label', isDarkTheme ? 'Switch to light mode' : 'Switch to dark mode');
+    toggle.querySelector('.theme-toggle__icon').textContent = isDarkTheme ? '☀️' : '🌙';
+    toggle.querySelector('.theme-toggle__label').textContent = isDarkTheme ? 'Light mode' : 'Dark mode';
+  }
+}
+
+function toggleTheme() {
+  const currentTheme = document.documentElement.getAttribute('data-theme') === DARK_THEME ? DARK_THEME : LIGHT_THEME;
+  const nextTheme = currentTheme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
+  window.localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+  applyTheme(nextTheme);
+}
+
 function createBoardElement() {
   const boardDiv = document.getElementById('sudoku-board');
   boardDiv.innerHTML = '';
@@ -188,9 +222,13 @@ async function checkSolution() {
 
 // Wire buttons
 window.addEventListener('load', () => {
+  const storedTheme = getPreferredTheme();
+  applyTheme(storedTheme);
+
   document.getElementById('new-game').addEventListener('click', newGame);
   document.getElementById('check-solution').addEventListener('click', checkSolution);
   document.getElementById('hint-solution').addEventListener('click', applyHint);
+  document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
   document.getElementById('difficulty-select').addEventListener('change', (event) => {
     currentDifficulty = event.target.value;
     newGame();
