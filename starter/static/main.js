@@ -43,6 +43,12 @@ function toggleTheme() {
   applyTheme(nextTheme);
 }
 
+function getBoxClass(row, col) {
+  const boxRow = Math.floor(row / 3);
+  const boxCol = Math.floor(col / 3);
+  return (boxRow + boxCol) % 2 === 0 ? 'box-sky' : 'box-green';
+}
+
 function createBoardElement() {
   const boardDiv = document.getElementById('sudoku-board');
   boardDiv.innerHTML = '';
@@ -53,7 +59,7 @@ function createBoardElement() {
       const input = document.createElement('input');
       input.type = 'text';
       input.maxLength = 1;
-      input.className = 'sudoku-cell';
+      input.className = `sudoku-cell ${getBoxClass(i, j)}`;
       input.dataset.row = i;
       input.dataset.col = j;
       input.setAttribute('aria-label', `Row ${i + 1}, Column ${j + 1}`);
@@ -86,12 +92,12 @@ function renderPuzzle(puz) {
       if (val !== 0) {
         inp.value = val;
         inp.disabled = true;
-        inp.className = 'sudoku-cell prefilled';
+        inp.className = `sudoku-cell prefilled ${getBoxClass(i, j)}`;
         inp.setAttribute('aria-readonly', 'true');
       } else {
         inp.value = '';
         inp.disabled = false;
-        inp.className = 'sudoku-cell';
+        inp.className = `sudoku-cell ${getBoxClass(i, j)}`;
         inp.setAttribute('aria-readonly', 'false');
       }
     }
@@ -152,9 +158,12 @@ async function applyHint() {
   const boardInputs = document.getElementById('sudoku-board').getElementsByTagName('input');
   for (let idx = 0; idx < boardInputs.length; idx++) {
     const inp = boardInputs[idx];
-    inp.className = 'sudoku-cell';
-    if (puzzle[Math.floor(idx / SIZE)][idx % SIZE] !== 0) {
-      inp.className = 'sudoku-cell prefilled';
+    const row = Math.floor(idx / SIZE);
+    const col = idx % SIZE;
+    const boxClass = getBoxClass(row, col);
+    inp.className = `sudoku-cell ${boxClass}`;
+    if (puzzle[row][col] !== 0) {
+      inp.className = `sudoku-cell prefilled ${boxClass}`;
     }
   }
 
@@ -163,7 +172,7 @@ async function applyHint() {
     const idx = row * SIZE + col;
     const inp = boardInputs[idx];
     inp.value = data.board[row][col];
-    inp.className = 'sudoku-cell hint';
+    inp.className = `sudoku-cell hint ${getBoxClass(row, col)}`;
     inp.setAttribute('aria-readonly', 'false');
     inp.disabled = false;
     document.getElementById('message').innerText = 'Hint applied.';
@@ -201,9 +210,12 @@ async function checkSolution() {
   for (let idx = 0; idx < inputs.length; idx++) {
     const inp = inputs[idx];
     if (inp.disabled) continue;
-    inp.className = 'sudoku-cell';
+    const row = Math.floor(idx / SIZE);
+    const col = idx % SIZE;
+    const boxClass = getBoxClass(row, col);
+    inp.className = `sudoku-cell ${boxClass}`;
     if (incorrect.has(idx)) {
-      inp.className = 'sudoku-cell incorrect';
+      inp.className = `sudoku-cell incorrect ${boxClass}`;
     }
   }
 

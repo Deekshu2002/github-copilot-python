@@ -8,9 +8,9 @@
     --board-border: #2c2c2c;
     --cell-bg: #fcfcfc;
     --cell-border: #c4c4c4;
-    --cell-alt-bg: #f7f8fc;
-    --cell-prefilled-bg: #eef2ff;
     --cell-prefilled-text: #1f2937;
+    --box-sky-bg: #E3F2FD;
+    --box-green-bg: #E8F5E9;
     --cell-focus-bg: #e8f4ff;
     --cell-focus-border: #1d4ed8;
     --hint-bg: #fff7d6;
@@ -47,9 +47,9 @@
     --board-border: #f9fafb;
     --cell-bg: #111827;
     --cell-border: #4b5563;
-    --cell-alt-bg: #1f2937;
-    --cell-prefilled-bg: #374151;
     --cell-prefilled-text: #f9fafb;
+    --box-sky-bg: #E3F2FD;
+    --box-green-bg: #E8F5E9;
     --cell-focus-bg: #1e3a8a;
     --cell-focus-border: #60a5fa;
     --hint-bg: #433701;
@@ -146,6 +146,14 @@ h1 {
     min-height: 44px;
 }
 
+.sudoku-cell.box-sky {
+    background-color: var(--box-sky-bg);
+}
+
+.sudoku-cell.box-green {
+    background-color: var(--box-green-bg);
+}
+
 .sudoku-cell:focus {
     background: var(--cell-focus-bg);
     border-color: var(--cell-focus-border);
@@ -153,7 +161,6 @@ h1 {
 }
 
 .sudoku-cell.prefilled {
-    background: var(--cell-prefilled-bg);
     font-weight: bold;
     color: var(--cell-prefilled-text);
 }
@@ -192,23 +199,6 @@ h1 {
     border-bottom: 3px solid var(--board-border);
 }
 
-.sudoku-row:nth-child(1) .sudoku-cell,
-.sudoku-row:nth-child(2) .sudoku-cell,
-.sudoku-row:nth-child(3) .sudoku-cell {
-    background-color: var(--cell-bg);
-}
-
-.sudoku-row:nth-child(4) .sudoku-cell,
-.sudoku-row:nth-child(5) .sudoku-cell,
-.sudoku-row:nth-child(6) .sudoku-cell {
-    background-color: var(--cell-alt-bg);
-}
-
-.sudoku-row:nth-child(7) .sudoku-cell,
-.sudoku-row:nth-child(8) .sudoku-cell,
-.sudoku-row:nth-child(9) .sudoku-cell {
-    background-color: var(--cell-bg);
-}
 
 .controls {
     margin: 20px auto;
