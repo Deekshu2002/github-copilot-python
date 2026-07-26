@@ -1,57 +1,38 @@
-import copy
-import random
+"""Backward-compatible imports for the Sudoku modules."""
 
-SIZE = 9
-EMPTY = 0
+from __future__ import annotations
 
-def deep_copy(board):
-    return copy.deepcopy(board)
+from sudoku_constants import EMPTY, SIZE
+from sudoku_generator import create_empty_board, deep_copy, generate_puzzle, remove_cells
+from sudoku_solver import (
+    count_solutions,
+    is_safe,
+    is_valid_box,
+    is_valid_column,
+    is_valid_row,
+    solve_board,
+)
+from sudoku_validator import find_incorrect_cells
 
-def create_empty_board():
-    return [[EMPTY for _ in range(SIZE)] for _ in range(SIZE)]
-
-def is_safe(board, row, col, num):
-    # Check row and column
-    for x in range(SIZE):
-        if board[row][x] == num or board[x][col] == num:
-            return False
-    # Check 3x3 box
-    start_row = row - row % 3
-    start_col = col - col % 3
-    for i in range(3):
-        for j in range(3):
-            if board[start_row + i][start_col + j] == num:
-                return False
-    return True
 
 def fill_board(board):
-    for row in range(SIZE):
-        for col in range(SIZE):
-            if board[row][col] == EMPTY:
-                possible = list(range(1, SIZE + 1))
-                random.shuffle(possible)
-                for candidate in possible:
-                    if is_safe(board, row, col, candidate):
-                        board[row][col] = candidate
-                        if fill_board(board):
-                            return True
-                        board[row][col] = EMPTY
-                return False
-    return True
+    """Backward-compatible wrapper for the old fill_board API."""
+    return solve_board(board)
 
-def remove_cells(board, clues):
-    attempts = SIZE * SIZE - clues
-    while attempts > 0:
-        row = random.randrange(SIZE)
-        col = random.randrange(SIZE)
-        if board[row][col] != EMPTY:
-            board[row][col] = EMPTY
-            attempts -= 1
 
-def generate_puzzle(clues=35):
-    board = create_empty_board()
-    fill_board(board)
-    solution = deep_copy(board)
-    remove_cells(board, clues)
-    puzzle = deep_copy(board)
-    return puzzle, solution
+__all__ = [
+    "EMPTY",
+    "SIZE",
+    "create_empty_board",
+    "deep_copy",
+    "fill_board",
+    "find_incorrect_cells",
+    "generate_puzzle",
+    "is_safe",
+    "is_valid_box",
+    "is_valid_column",
+    "is_valid_row",
+    "remove_cells",
+    "solve_board",
+    "count_solutions",
+]
