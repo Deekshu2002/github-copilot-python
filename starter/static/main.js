@@ -16,9 +16,14 @@ function createBoardElement() {
       input.className = 'sudoku-cell';
       input.dataset.row = i;
       input.dataset.col = j;
+      input.setAttribute('aria-label', `Row ${i + 1}, Column ${j + 1}`);
       input.addEventListener('input', (e) => {
         const val = e.target.value.replace(/[^1-9]/g, '');
         e.target.value = val;
+        const boardDiv = document.getElementById('sudoku-board');
+        const inputs = boardDiv.getElementsByTagName('input');
+        const board = window.sudokuValidation.getBoardState(inputs);
+        window.sudokuValidation.applyConflictHighlighting(inputs, board);
       });
       rowDiv.appendChild(input);
     }
@@ -40,12 +45,16 @@ function renderPuzzle(puz) {
         inp.value = val;
         inp.disabled = true;
         inp.className += ' prefilled';
+        inp.setAttribute('aria-readonly', 'true');
       } else {
         inp.value = '';
         inp.disabled = false;
+        inp.className = 'sudoku-cell';
+        inp.setAttribute('aria-readonly', 'false');
       }
     }
   }
+  window.sudokuValidation.resetBoardValidation(inputs);
 }
 
 async function newGame() {
