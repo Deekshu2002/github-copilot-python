@@ -1,49 +1,66 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sudoku Game</title>
   <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
-  <h1>Sudoku Game</h1>
-  <div class="controls controls-top">
-    <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Toggle dark mode">
-      <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
-      <span class="theme-toggle__label">Dark mode</span>
-    </button>
-    <label for="difficulty-select" class="difficulty-label">Difficulty:</label>
-    <select id="difficulty-select">
-      <option value="easy">Easy</option>
-      <option value="medium">Medium</option>
-      <option value="hard">Hard</option>
-    </select>
-    <span id="difficulty-display" class="difficulty-display">Current: Easy</span>
-  </div>
-  <div id="sudoku-board"></div>
-  <div class="controls">
-    <button id="new-game">New Game</button>
-    <button id="check-solution">Check Solution</button>
-    <button id="hint-solution">Hint</button>
-    <span id="hint-count" class="hint-count">Hints: 0</span>
-    <span id="timer-display" class="timer-display">Time: 00:00</span>
-    <span id="message"></span>
-  </div>
-  <div class="scoreboard-panel">
-    <h2>Top 10 Fastest Times</h2>
-    <table id="scoreboard-table" class="scoreboard-table">
-      <thead>
-        <tr>
-          <th>Rank</th>
-          <th>Name</th>
-          <th>Time</th>
-          <th>Difficulty</th>
-          <th>Hints</th>
-        </tr>
-      </thead>
-      <tbody id="scoreboard-body"></tbody>
-    </table>
-  </div>
+  <main class="page-shell">
+    <header class="page-header">
+      <h1>Sudoku Game</h1>
+      <p class="page-intro">Solve the puzzle, use hints, and track your fastest time.</p>
+    </header>
+
+    <section class="controls controls-top" aria-label="Game controls">
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Toggle dark mode">
+        <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
+        <span class="theme-toggle__label">Dark mode</span>
+      </button>
+
+      <label for="difficulty-select" class="difficulty-label">Difficulty:</label>
+      <select id="difficulty-select" aria-label="Select puzzle difficulty">
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+      </select>
+
+      <span id="difficulty-display" class="difficulty-display" aria-live="polite">Current: Easy</span>
+    </section>
+
+    <section class="board-section" aria-labelledby="board-heading">
+      <h2 id="board-heading" class="sr-only">Sudoku board</h2>
+      <div id="sudoku-board" role="grid" aria-label="Sudoku board"></div>
+    </section>
+
+    <section class="controls controls-bottom" aria-label="Game actions">
+      <button id="new-game" type="button">New Game</button>
+      <button id="check-solution" type="button">Check Solution</button>
+      <button id="hint-solution" type="button">Hint</button>
+      <span id="hint-count" class="hint-count" aria-live="polite">Hints: 0</span>
+      <span id="timer-display" class="timer-display" aria-live="polite">Time: 00:00</span>
+      <p id="message" class="status-message" role="status" aria-live="polite" aria-atomic="true"></p>
+    </section>
+
+    <section class="scoreboard-panel" aria-labelledby="scoreboard-heading">
+      <h2 id="scoreboard-heading">Top 10 Fastest Times</h2>
+      <table id="scoreboard-table" class="scoreboard-table">
+        <caption class="sr-only">Top 10 fastest Sudoku completion times</caption>
+        <thead>
+          <tr>
+            <th scope="col">Rank</th>
+            <th scope="col">Name</th>
+            <th scope="col">Time</th>
+            <th scope="col">Difficulty</th>
+            <th scope="col">Hints</th>
+          </tr>
+        </thead>
+        <tbody id="scoreboard-body"></tbody>
+      </table>
+    </section>
+  </main>
+
   <div id="cell-feedback" class="sr-only">Conflicting values are highlighted and announced for screen readers.</div>
   <script src="/static/sudoku_validation.js"></script>
   <script src="/static/timer.js"></script>

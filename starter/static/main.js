@@ -192,7 +192,7 @@ async function checkSolution() {
   const data = await res.json();
   const msg = document.getElementById('message');
   if (data.error) {
-    msg.style.color = '#d32f2f';
+    msg.style.color = 'var(--message-text)';
     msg.innerText = data.error;
     return;
   }
@@ -208,13 +208,13 @@ async function checkSolution() {
   }
 
   if (data.status === 'incomplete') {
-    msg.style.color = '#f57c00';
+    msg.style.color = 'var(--message-warning)';
     msg.innerText = 'The puzzle is incomplete.';
   } else if (data.status === 'incorrect') {
-    msg.style.color = '#d32f2f';
+    msg.style.color = 'var(--message-text)';
     msg.innerText = 'The puzzle contains incorrect values.';
   } else {
-    msg.style.color = '#388e3c';
+    msg.style.color = 'var(--message-success)';
     msg.innerText = 'Congratulations! You solved it!';
     window.sudokuTimer.completeGame();
   }

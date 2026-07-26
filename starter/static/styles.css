@@ -83,16 +83,33 @@ body {
     text-align: center;
     margin: 0;
     padding: 0;
+    min-height: 100vh;
+}
+
+.page-shell {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 24px 16px 40px;
+}
+
+.page-header {
+    margin-bottom: 16px;
+}
+
+.page-intro {
+    margin: 8px 0 0;
+    color: var(--panel-text);
 }
 
 h1 {
-    margin-top: 30px;
+    margin-top: 0;
     color: var(--page-text);
+    font-size: clamp(2rem, 4vw, 2.5rem);
 }
 
 #sudoku-board {
     display: inline-block;
-    margin: 30px auto;
+    margin: 24px auto 16px;
     border: 4px solid var(--board-border);
     background: var(--panel-bg);
     box-shadow: 0 2px 12px var(--shadow);
@@ -101,6 +118,11 @@ h1 {
     overflow: hidden;
     padding: 6px;
     box-sizing: border-box;
+}
+
+.board-section {
+    display: flex;
+    justify-content: center;
 }
 
 .sudoku-row {
@@ -113,17 +135,21 @@ h1 {
     min-width: 0;
     border: 1px solid var(--cell-border);
     text-align: center;
-    font-size: clamp(14px, 2.2vw, 20px);
+    font-size: clamp(16px, 3vw, 24px);
+    line-height: 1;
     outline: none;
     background: var(--cell-bg);
-    transition: background 0.2s, border-color 0.2s;
+    transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
     color: var(--input-text);
     box-sizing: border-box;
+    padding: 0;
+    min-height: 44px;
 }
 
 .sudoku-cell:focus {
     background: var(--cell-focus-bg);
     border-color: var(--cell-focus-border);
+    box-shadow: inset 0 0 0 2px var(--cell-focus-border);
 }
 
 .sudoku-cell.prefilled {
@@ -256,26 +282,32 @@ h1 {
 }
 
 button {
-    padding: 8px 18px;
+    padding: 10px 18px;
     margin: 0 8px;
     font-size: 16px;
-    border: none;
+    border: 2px solid transparent;
     background: var(--button-bg);
     color: var(--button-text);
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: background 0.2s, border-color 0.2s, transform 0.2s;
+    min-height: 44px;
 }
 
 button:hover {
     background: var(--button-hover-bg);
 }
 
+button:focus-visible {
+    outline: 3px solid var(--cell-focus-border);
+    outline-offset: 2px;
+}
+
 .theme-toggle {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 8px 12px;
+    padding: 10px 14px;
     border-radius: 999px;
     background: var(--toggle-bg);
     color: var(--toggle-text);
@@ -297,6 +329,7 @@ button:hover {
     margin-left: 20px;
     font-size: 16px;
     color: var(--message-text);
+    min-height: 1.5em;
 }
 
 #message[style*='color: rgb(56, 142, 60)'] {
@@ -319,71 +352,48 @@ button:hover {
     border: 0;
 }
 
-.controls {
-    margin: 20px auto;
-}
+@media (max-width: 640px) {
+    .page-shell {
+        padding: 16px 12px 32px;
+    }
 
-.timer-display {
-    margin-left: 12px;
-    font-weight: bold;
-    color: #1976d2;
-}
+    .controls {
+        margin: 16px auto;
+        align-items: stretch;
+    }
 
-.scoreboard-panel {
-    margin: 20px auto 40px;
-    max-width: 480px;
-    text-align: left;
-    background: #fff;
-    padding: 16px 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-}
+    button,
+    .theme-toggle,
+    #difficulty-select {
+        width: 100%;
+        justify-content: center;
+    }
 
-.scoreboard-panel h2 {
-    margin-top: 0;
-    font-size: 18px;
-}
+    .controls-top {
+        flex-direction: column;
+        align-items: stretch;
+    }
 
-.scoreboard-table {
-    width: 100%;
-    border-collapse: collapse;
-}
+    .controls-bottom {
+        flex-direction: column;
+        align-items: stretch;
+    }
 
-.scoreboard-table th,
-.scoreboard-table td {
-    border-bottom: 1px solid #e0e0e0;
-    padding: 8px 6px;
-    text-align: left;
-}
+    #message {
+        margin-left: 0;
+        margin-top: 8px;
+    }
 
-.scoreboard-table th {
-    color: #555;
-    font-size: 14px;
-}
+    .scoreboard-panel {
+        max-width: none;
+        padding: 14px;
+    }
 
-.controls-top {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.difficulty-label {
-    font-weight: bold;
-    color: #333;
-}
-
-#difficulty-select {
-    padding: 8px 10px;
-    border: 1px solid #bbb;
-    border-radius: 4px;
-    font-size: 16px;
-}
-
-.difficulty-display {
-    font-size: 16px;
-    color: #333;
+    .scoreboard-table th,
+    .scoreboard-table td {
+        padding: 8px 4px;
+        font-size: 14px;
+    }
 }
 
 button {
