@@ -11,6 +11,12 @@ from sudoku_solver import count_solutions, solve_board
 
 Board = List[List[int]]
 
+DIFFICULTY_CLUES = {
+    "easy": 40,
+    "medium": 32,
+    "hard": 24,
+}
+
 
 def create_empty_board() -> Board:
     """Create a blank Sudoku board filled with empty cells."""
@@ -45,13 +51,21 @@ def remove_cells(board: Board, clues: int) -> None:
         attempts -= 1
 
 
-def generate_puzzle(clues: int = 35) -> Tuple[Board, Board]:
+def get_clues_for_difficulty(difficulty: str) -> int:
+    """Return the clue count for a supported difficulty label."""
+    normalized = (difficulty or "easy").strip().lower()
+    return DIFFICULTY_CLUES.get(normalized, DIFFICULTY_CLUES["easy"])
+
+
+def generate_puzzle(clues: int = 35, difficulty: str = "easy") -> Tuple[Board, Board]:
     """Generate a new Sudoku puzzle and its solved board."""
     board = create_empty_board()
     solved = solve_board(board)
     if not solved:
         raise ValueError("Unable to generate a valid Sudoku board")
     solution = deep_copy(board)
-    remove_cells(board, clues)
+
+    clue_count = clues if clues != 35 else get_clues_for_difficulty(difficulty)
+    remove_cells(board, clue_count)
     puzzle = deep_copy(board)
     return puzzle, solution

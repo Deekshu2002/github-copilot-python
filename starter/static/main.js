@@ -1,6 +1,7 @@
 // Client-side rendering and interaction for the Flask-backed Sudoku
 const SIZE = 9;
 let puzzle = [];
+let currentDifficulty = 'easy';
 
 function createBoardElement() {
   const boardDiv = document.getElementById('sudoku-board');
@@ -48,10 +49,17 @@ function renderPuzzle(puz) {
 }
 
 async function newGame() {
-  const res = await fetch('/new');
+  const select = document.getElementById('difficulty-select');
+  currentDifficulty = select ? select.value : currentDifficulty;
+  const res = await fetch(`/new?difficulty=${encodeURIComponent(currentDifficulty)}`);
   const data = await res.json();
   renderPuzzle(data.puzzle);
   document.getElementById('message').innerText = '';
+  const difficultyDisplay = document.getElementById('difficulty-display');
+  if (difficultyDisplay) {
+    const label = currentDifficulty.charAt(0).toUpperCase() + currentDifficulty.slice(1);
+    difficultyDisplay.innerText = `Current: ${label}`;
+  }
 }
 
 async function checkSolution() {
@@ -100,6 +108,10 @@ async function checkSolution() {
 window.addEventListener('load', () => {
   document.getElementById('new-game').addEventListener('click', newGame);
   document.getElementById('check-solution').addEventListener('click', checkSolution);
+  document.getElementById('difficulty-select').addEventListener('change', (event) => {
+    currentDifficulty = event.target.value;
+    newGame();
+  });
   // initialize
   newGame();
 });

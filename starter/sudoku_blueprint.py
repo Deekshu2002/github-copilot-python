@@ -28,11 +28,12 @@ def index() -> str:
 @bp.route("/new")
 def new_game():
     """Generate and return a new puzzle for the current session."""
-    clues = int(request.args.get("clues", 35))
-    puzzle, solution = generate_puzzle(clues)
+    clues = request.args.get("clues", default=35, type=int)
+    difficulty = request.args.get("difficulty", default="easy")
+    puzzle, solution = generate_puzzle(clues=clues, difficulty=difficulty)
     CURRENT["puzzle"] = puzzle
     CURRENT["solution"] = solution
-    return jsonify({"puzzle": puzzle})
+    return jsonify({"puzzle": puzzle, "difficulty": difficulty})
 
 
 @bp.route("/check", methods=["POST"])

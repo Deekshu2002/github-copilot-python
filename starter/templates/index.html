@@ -7,6 +7,15 @@
 </head>
 <body>
   <h1>Sudoku Game</h1>
+  <div class="controls controls-top">
+    <label for="difficulty-select" class="difficulty-label">Difficulty:</label>
+    <select id="difficulty-select">
+      <option value="easy">Easy</option>
+      <option value="medium">Medium</option>
+      <option value="hard">Hard</option>
+    </select>
+    <span id="difficulty-display" class="difficulty-display">Current: Easy</span>
+  </div>
   <div id="sudoku-board"></div>
   <div class="controls">
     <button id="new-game">New Game</button>
