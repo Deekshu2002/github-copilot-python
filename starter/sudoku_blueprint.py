@@ -6,16 +6,17 @@ from typing import Any, Dict, List, Optional
 
 from flask import Blueprint, jsonify, render_template, request
 
-from sudoku_constants import SIZE
+from sudoku_constants import EMPTY, SIZE
 from sudoku_generator import generate_puzzle
 from sudoku_validator import evaluate_board_state, find_incorrect_cells
 
 bp = Blueprint("sudoku", __name__)
 
 
-CURRENT: Dict[str, Optional[List[List[int]]]] = {
+CURRENT: Dict[str, Any] = {
     "puzzle": None,
     "solution": None,
+    "hints_used": 0,
 }
 
 
@@ -33,7 +34,44 @@ def new_game():
     puzzle, solution = generate_puzzle(clues=clues, difficulty=difficulty)
     CURRENT["puzzle"] = puzzle
     CURRENT["solution"] = solution
-    return jsonify({"puzzle": puzzle, "difficulty": difficulty})
+    CURRENT["hints_used"] = 0
+    return jsonify({"puzzle": puzzle, "difficulty": difficulty, "hints_used": 0})
+
+
+@bp.route("/hint", methods=["POST"])
+def apply_hint():
+    """Fill one empty editable cell with the correct value."""
+    data = request.json or {}
+    board = data.get("board")
+    solution = CURRENT.get("solution")
+    puzzle = CURRENT.get("puzzle")
+
+    if solution is None or puzzle is None:
+        return jsonify({"error": "No game in progress"}), 400
+
+    if not isinstance(board, list) or len(board) != SIZE:
+        return jsonify({"error": "Invalid board"}), 400
+
+    if evaluate_board_state(board, solution) == "complete":
+        return jsonify({"board": board, "position": None, "hints_used": CURRENT.get("hints_used", 0)})
+
+    updated_board = [row[:] for row in board]
+    chosen_position: Optional[List[int]] = None
+    for row in range(SIZE):
+        for col in range(SIZE):
+            if updated_board[row][col] == EMPTY and puzzle[row][col] == EMPTY:
+                updated_board[row][col] = solution[row][col]
+                chosen_position = [row, col]
+                CURRENT["hints_used"] = CURRENT.get("hints_used", 0) + 1
+                break
+        if chosen_position is not None:
+            break
+
+    return jsonify({
+        "board": updated_board,
+        "position": chosen_position,
+        "hints_used": CURRENT.get("hints_used", 0),
+    })
 
 
 @bp.route("/check", methods=["POST"])

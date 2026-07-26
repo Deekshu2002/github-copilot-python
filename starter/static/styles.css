@@ -47,6 +47,13 @@ h1 {
     color: #333;
 }
 
+.sudoku-cell.hint {
+    background: #fff3cd;
+    color: #8a6d3b;
+    border-color: #f0c36d;
+    font-weight: bold;
+}
+
 .sudoku-cell.conflict {
     background: #ffe0b2;
     border-color: #f57c00;

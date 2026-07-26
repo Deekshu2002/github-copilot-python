@@ -86,6 +86,37 @@ def test_check_endpoint_reports_complete_board(client):
     assert response.get_json()['status'] == 'complete'
 
 
+def test_hint_endpoint_fills_one_empty_editable_cell(client):
+    response = client.get('/new?difficulty=easy')
+    puzzle = response.get_json()['puzzle']
+    board = [row[:] for row in puzzle]
+
+    response = client.post('/hint', json={'board': board})
+    data = response.get_json()
+
+    assert response.status_code == 200
+    assert data['hints_used'] == 1
+    assert data['position'] is not None
+    row, col = data['position']
+    assert puzzle[row][col] == 0
+    assert data['board'][row][col] == CURRENT['solution'][row][col]
+
+
+def test_hint_endpoint_is_noop_for_complete_board(client):
+    _, solution = generate_puzzle(clues=40)
+    CURRENT['solution'] = solution
+    CURRENT['puzzle'] = solution
+    CURRENT['hints_used'] = 0
+
+    response = client.post('/hint', json={'board': solution})
+    data = response.get_json()
+
+    assert response.status_code == 200
+    assert data['hints_used'] == 0
+    assert data['position'] is None
+    assert data['board'] == solution
+
+
 def test_evaluate_board_state_helper():
     solution = [
         [1, 2, 3, 4, 5, 6, 7, 8, 9],
