@@ -14,12 +14,14 @@ h1 {
 #sudoku-board {
     display: inline-block;
     margin: 30px auto;
-    border: 4px solid #333;
+    border: 4px solid #2c2c2c;
     background: #fff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    max-width: 100%;
-    overflow-x: auto;
-    padding: 8px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    max-width: min(100%, 540px);
+    width: min(100%, 540px);
+    overflow: hidden;
+    padding: 6px;
+    box-sizing: border-box;
 }
 
 .sudoku-row {
@@ -27,55 +29,80 @@ h1 {
 }
 
 .sudoku-cell {
-    width: min(40px, 8vw);
-    height: min(40px, 8vw);
-    border: 1px solid #bbb;
+    width: calc(100% / 9);
+    aspect-ratio: 1 / 1;
+    min-width: 0;
+    border: 1px solid #c4c4c4;
     text-align: center;
-    font-size: 20px;
+    font-size: clamp(14px, 2.2vw, 20px);
     outline: none;
-    background: #fafafa;
-    transition: background 0.2s;
+    background: #fcfcfc;
+    transition: background 0.2s, border-color 0.2s;
+    color: #1f2937;
+    box-sizing: border-box;
 }
 
 .sudoku-cell:focus {
-    background: #e0f7fa;
+    background: #e8f4ff;
+    border-color: #1d4ed8;
 }
 
 .sudoku-cell.prefilled {
-    background: #e0e0e0;
+    background: #eef2ff;
     font-weight: bold;
-    color: #333;
+    color: #1f2937;
 }
 
 .sudoku-cell.hint {
-    background: #fff3cd;
-    color: #8a6d3b;
-    border-color: #f0c36d;
+    background: #fff7d6;
+    color: #7c4a00;
+    border-color: #d29b00;
     font-weight: bold;
 }
 
 .sudoku-cell.conflict {
-    background: #ffe0b2;
-    border-color: #f57c00;
+    background: #ffe7d6;
+    border-color: #d97706;
+    color: #7c2d12;
 }
 
 .sudoku-cell.conflict-source {
-    outline: 2px solid #d84315;
+    outline: 2px solid #b45309;
     outline-offset: -2px;
 }
 
 .sudoku-cell.incorrect {
-    background: #ffcdd2;
+    background: #fde2e2;
+    color: #991b1b;
+    border-color: #dc2626;
 }
 
 .sudoku-cell:nth-child(3),
 .sudoku-cell:nth-child(6) {
-    border-right: 3px solid #333;
+    border-right: 3px solid #2c2c2c;
 }
 
 .sudoku-row:nth-child(3) .sudoku-cell,
 .sudoku-row:nth-child(6) .sudoku-cell {
-    border-bottom: 3px solid #333;
+    border-bottom: 3px solid #2c2c2c;
+}
+
+.sudoku-row:nth-child(1) .sudoku-cell,
+.sudoku-row:nth-child(2) .sudoku-cell,
+.sudoku-row:nth-child(3) .sudoku-cell {
+    background-color: #fbfbff;
+}
+
+.sudoku-row:nth-child(4) .sudoku-cell,
+.sudoku-row:nth-child(5) .sudoku-cell,
+.sudoku-row:nth-child(6) .sudoku-cell {
+    background-color: #f7f8fc;
+}
+
+.sudoku-row:nth-child(7) .sudoku-cell,
+.sudoku-row:nth-child(8) .sudoku-cell,
+.sudoku-row:nth-child(9) .sudoku-cell {
+    background-color: #fbfbff;
 }
 
 .controls {
